@@ -30,7 +30,7 @@ done
 
 if [ -n "$CID" ]
 then
-    docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}  {{.Name}}  '$CID CID
+    docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}  {{.Name}}  '$CID $CID
 else
     # get all ips for docker containers
     for i in $(docker ps | awk '{print $1}' | \grep -v CONTAINER)
