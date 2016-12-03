@@ -11,7 +11,7 @@ then
 fi
 
 NAME="$1"
-[ -n "$2" ] && EXEC="$2"
+[ -n "$2" ] && EXEC="${@:2}"
 
-docker exec -it "$NAME" "$EXEC"
+docker exec -it "$NAME" $EXEC
 
