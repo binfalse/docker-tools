@@ -1,0 +1,40 @@
+#!/bin/bash
+
+function help ()
+{
+    echo "USAGE: $0 [-c CID] [-h]"
+    echo "  -c CID  show only the ip of container with id CID"
+    echo "  -h      show this help"
+}
+
+CID=""
+
+
+while getopts ":c:h" opt
+do
+    case $opt in
+        c)
+            CID="$OPTARG"
+            ;;
+        h)
+            help
+            exit 0
+            ;;
+        \?)
+            help
+            echo "Invalid option: -$OPTARG" >&2
+            exit 1
+            ;;
+    esac
+done
+
+if [ -n "$CID" ]
+then
+    docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}  {{.Name}}  '$CID CID
+else
+    # get all ips for docker containers
+    for i in $(docker ps | awk '{print $1}' | \grep -v CONTAINER)
+    do
+        docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}  {{.Name}}  '$i $i
+    done | column -t
+fi

@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if [ "$1" = "-h" ] || [ "$2" = "-h" ]
+then
+    echo "$0 [-i] [-h]"
+    echo "      default: clean exited containers"
+    echo "  -i  clean dangling images instead of containers"
+    echo "  -h  show this help"
+    exit
+fi
+
+
+if [ "$1" = "-i" ]
+then
+    for i in $(docker images --format "{{.ID}}" --filter "dangling=true")
+    do
+        docker rmi $i
+    done
+    exit 0
+fi
+
+
+
+
+# clean up exited containers
+for i in $(docker ps -a | \grep Exited | awk '{print $1}')
+do
+    docker rm $i
+done
+
+

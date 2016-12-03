@@ -1,0 +1,17 @@
+#!/bin/bash
+
+EXEC="/bin/bash"
+
+if [ -z "$1" ]
+then
+    echo "USAGE: $0 CID [EXEC]"
+    echo "  CID     enter container with id CID"
+    echo "  EXEC    executable to run, defaults to /bin/bash"
+    exit 1
+fi
+
+NAME="$1"
+[ -n "$2" ] && EXEC="$2"
+
+docker exec -it "$NAME" "$EXEC"
+

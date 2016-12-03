@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ "$1" != "-f" ]
+then
+    echo "This script will kill all running containers."
+    echo "As this is a fail prone action it is required that"
+    echo "you pass a '-f' as the first argument."
+    echo ""
+    echo "Please try again with '-f' if you know what you're doing."
+    exit 1
+fi
+
+# kill all running containers
+for i in $(docker ps | \grep Up | awk '{print $1}')
+do
+    docker kill $i
+done
+
+

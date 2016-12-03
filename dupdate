@@ -1,0 +1,61 @@
+#!/bin/bash
+
+
+MODE="n"
+#RESTART="n"
+
+function help ()
+{
+    echo "USAGE: $0 [-v] [-s] [-h]"
+    echo "  -v  verbose mode, also print images that have not been updates"
+    echo "  -s  silent mode, do not print errors, just print updated images"
+# that would be a cool feature, but not sure how to implement it, yet...
+#    echo "  -r  restart containers that are based on images that were updated"
+    echo "  -h  show this help"
+}
+
+
+while getopts ":vsh" opt
+do
+    case $opt in
+        v)
+            MODE="v"
+            ;;
+#        r)
+#            RESTART="y"
+#            ;;
+        s)
+            MODE="s"
+            ;;
+        h)
+            help
+            exit 0
+            ;;
+        \?)
+            help
+            echo "Invalid option: -$OPTARG" >&2
+            exit 1
+            ;;
+    esac
+done
+
+
+
+for i in $(docker images --format "{{.Repository}}:{{.Tag}}" | \grep -v '<none>')
+do
+    out=$(docker pull $i 2>&1 | \grep '^Status')
+    if [ "$?" -ne 0 ]
+    then
+        [ "$MODE" == "s" ] || echo "error pulling $i"
+    else
+        if [[ "$out" =~ "Downloaded newer image" ]]
+        then
+            echo "$i was updated"
+        elif [[ "$out" =~ "Image is up to date" ]]
+        then
+            [ "$MODE" == "v" ] && echo "$i is up-to-date"
+        else
+            echo $i -- $out
+        fi
+    fi
+done
