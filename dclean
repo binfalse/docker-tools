@@ -1,4 +1,22 @@
 #!/bin/bash
+#
+# Copyright 2017  Martin Scharm
+#
+# This file is part of bf-docker-tools.
+# <https://github.com/binfalse/docker-tools>
+# <https://binfalse.de/2016/12/03/handy-docker-tools/>
+#
+# bf-docker-tools is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the Free
+# Software Foundation, either version 3 of the License, or (at your option) any
+# later version.
+#
+# bf-docker-tools is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# bf-docker-tools. If not, see <http://www.gnu.org/licenses/>.
 
 if [ "$1" = "-h" ] || [ "$2" = "-h" ]
 then
