@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2016-2017  Martin Scharm
+# Copyright 2016-2021  Martin Scharm
 #
 # This file is part of bf-docker-tools.
 # <https://github.com/binfalse/docker-tools>
@@ -18,20 +18,27 @@
 # You should have received a copy of the GNU General Public License along with
 # bf-docker-tools. If not, see <http://www.gnu.org/licenses/>.
 
-if [ "$1" != "-f" ]
+if [ -z "$1" ]
 then
-    echo "This script will kill all running containers."
-    echo "As this is a fail prone action it is required that"
-    echo "you pass a '-f' as the first argument."
+    echo "Please provide a container name/id that will be killed and removed"
     echo ""
-    echo "Please try again with '-f' if you know what you're doing."
+    echo "Pass -f and this script will kill all running containers."
     exit 1
 fi
 
-# kill all running containers
-for i in $(docker ps | \grep Up | awk '{print $1}')
-do
-    docker kill $i
-done
+if [ "$1" = "-f" ]
+then
+    # kill all running containers
+    for i in $(docker ps | \grep Up | awk '{print $1}')
+    do
+        docker kill "$i"
+    done
+else
+    # kill and remove a single container
+    docker kill "$1" && docker rm "$1"
+fi
+
+
+
 
 
